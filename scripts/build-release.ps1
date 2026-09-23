@@ -39,7 +39,7 @@ try {
     }
 
     New-Item -ItemType Directory -Path $releaseDirectory -Force | Out-Null
-    $archiveName = "dobierz-z-koszyka-v$version.zip"
+    $archiveName = "dopakuj-extension-$version.zip"
     $archivePath = Join-Path $releaseDirectory $archiveName
 
     if (Test-Path -LiteralPath $archivePath) {

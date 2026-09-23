@@ -1,4 +1,4 @@
-# Dobierz z koszyka
+# Dopakuj
 
 Rozszerzenie do Chrome i Edge, które pomaga znaleźć dodatkowe produkty u sprzedawców, od których już coś kupujesz na Allegro.
 
@@ -14,12 +14,12 @@ Nie potrzebujesz Node.js, Git ani żadnych narzędzi programistycznych.
 2. W sekcji **Assets** pobierz plik o nazwie podobnej do:
 
    ```text
-   dobierz-z-koszyka-v1.0.0.zip
+   dopakuj-extension-v1.0.0.zip
    ```
 
    Nie wybieraj automatycznego pliku **Source code**.
 
-3. Rozpakuj pobrany ZIP do stałego miejsca, na przykład do folderu `Dokumenty\Dobierz z koszyka`. Nie usuwaj tego folderu po instalacji.
+3. Rozpakuj pobrany ZIP do stałego miejsca, na przykład do folderu `Dokumenty\Dopakuj`. Nie usuwaj tego folderu po instalacji.
 4. Otwórz stronę rozszerzeń:
    - Chrome: wpisz w pasku adresu `chrome://extensions`;
    - Edge: wpisz w pasku adresu `edge://extensions`.
@@ -36,7 +36,7 @@ Gotowe. Ostrzeżenie o rozszerzeniu uruchomionym w trybie deweloperskim jest w t
 ## Jak używać
 
 1. Otwórz Allegro i przejdź do koszyka.
-2. Kliknij ikonę **Dobierz z koszyka**. Z boku przeglądarki otworzy się panel.
+2. Kliknij ikonę **Dopakuj**. Z boku przeglądarki otworzy się panel.
 3. Wpisz nazwę produktu, którego szukasz.
 4. Wybierz sprzedawców zaznaczonych w koszyku, wszystkich albo tylko wybrane osoby.
 5. Kliknij **Szukaj**.
@@ -107,7 +107,7 @@ Skrypt automatycznie:
 Przykładowy wynik:
 
 ```text
-release/dobierz-z-koszyka-v1.1.0.zip
+release/dopakuj-extension-v1.1.0.zip
 ```
 
 Na GitHubie wybierz **Releases → Draft a new release**, wpisz tag zgodny z wersją, na przykład `v1.1.0`, przeciągnij ZIP do sekcji **Assets** i opublikuj Release.

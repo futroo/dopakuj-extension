@@ -1,6 +1,6 @@
 # Prywatność
 
-„Dobierz z koszyka” działa lokalnie w przeglądarce. Nie ma backendu i nie wysyła historii zakupów ani zawartości koszyka do autora rozszerzenia lub innych usług.
+„Dopakuj” działa lokalnie w przeglądarce. Nie ma backendu i nie wysyła historii zakupów ani zawartości koszyka do autora rozszerzenia lub innych usług.
 
 Rozszerzenie:
 
