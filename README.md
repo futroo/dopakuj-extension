@@ -1,33 +1,40 @@
 # Dopakuj
 
-Rozszerzenie do Chrome i Edge, które pomaga znaleźć dodatkowe produkty u sprzedawców, od których już coś kupujesz na Allegro.
+Rozszerzenie do Chrome, Edge i Opery, które pomaga znaleźć dodatkowe produkty u sprzedawców, od których już coś kupujesz na Allegro.
 
 Przykład: masz w koszyku kawę od trzech sprzedawców i chcesz dorzucić filtry do ekspresu. Zamiast otwierać każdy sklep osobno, wpisujesz „filtry”, a rozszerzenie zbiera pasujące oferty w jednym panelu.
 
-Projekt jest nieoficjalny i nie jest powiązany z Allegro. Rozszerzenia nie ma w Chrome Web Store ani Microsoft Edge Add-ons — instaluje się je ręcznie.
+Projekt jest nieoficjalny i nie jest powiązany z Allegro. Rozszerzenia nie ma w oficjalnych sklepach przeglądarek — instaluje się je ręcznie.
+
+## Podgląd
+
+![Panel rozszerzenia Dopakuj z wynikami wyszukiwania produktów](images/1.png)
 
 ## Instalacja — bez programowania
 
 Nie potrzebujesz Node.js, Git ani żadnych narzędzi programistycznych.
 
 1. Wejdź w **Releases** po prawej stronie tego repozytorium i otwórz najnowszą wersję.
-2. W sekcji **Assets** pobierz plik o nazwie podobnej do:
+2. W sekcji **Assets** pobierz ZIP przeznaczony dla swojej przeglądarki:
 
    ```text
-   dopakuj-extension-v1.0.0.zip
+   dopakuj-extension-chrome-edge-v1.0.0.zip
+   dopakuj-extension-opera-v1.0.0.zip
    ```
 
    Nie wybieraj automatycznego pliku **Source code**.
 
-3. Rozpakuj pobrany ZIP do stałego miejsca, na przykład do folderu `Dokumenty\Dopakuj`. Nie usuwaj tego folderu po instalacji.
-4. Otwórz stronę rozszerzeń:
+3. Rozpakuj pobrany ZIP. W środku znajdziesz gotowy folder odpowiedni dla przeglądarki.
+4. Przenieś ten folder w stałe miejsce, na przykład do Dokumentów. Nie usuwaj go po instalacji.
+5. Otwórz stronę rozszerzeń:
    - Chrome: wpisz w pasku adresu `chrome://extensions`;
-   - Edge: wpisz w pasku adresu `edge://extensions`.
+   - Edge: wpisz w pasku adresu `edge://extensions`;
+   - Opera: wpisz w pasku adresu `opera://extensions`.
 
-5. Włącz **Tryb dewelopera**.
-6. Kliknij **Załaduj rozpakowane**.
-7. Wskaż rozpakowany folder — ten, w którym znajduje się plik `manifest.json`.
-8. Opcjonalnie przypnij rozszerzenie do paska przeglądarki.
+6. Włącz **Tryb dewelopera**.
+7. Kliknij **Załaduj rozpakowane**.
+8. Wskaż rozpakowany folder `DopakujExtension-ChromeEdge` albo `DopakujExtension-Opera`. W jego środku znajduje się plik `manifest.json`.
+9. W Chrome lub Edge opcjonalnie przypnij rozszerzenie do paska przeglądarki. W Operze włącz **Dopakuj** w konfiguracji paska bocznego, jeśli ikona nie pojawiła się automatycznie.
 
 Gotowe. Ostrzeżenie o rozszerzeniu uruchomionym w trybie deweloperskim jest w tym przypadku normalne.
 
@@ -36,7 +43,7 @@ Gotowe. Ostrzeżenie o rozszerzeniu uruchomionym w trybie deweloperskim jest w t
 ## Jak używać
 
 1. Otwórz Allegro i przejdź do koszyka.
-2. Kliknij ikonę **Dopakuj**. Z boku przeglądarki otworzy się panel.
+2. Kliknij ikonę **Dopakuj** na pasku narzędzi Chrome/Edge albo na pasku bocznym Opery. Z boku przeglądarki otworzy się panel.
 3. Wpisz nazwę produktu, którego szukasz.
 4. Wybierz sprzedawców zaznaczonych w koszyku, wszystkich albo tylko wybrane osoby.
 5. Kliknij **Szukaj**.
@@ -49,7 +56,7 @@ Sprzedawcy są sprawdzani kolejno, więc przy większym koszyku wyszukiwanie mo�
 
 1. Pobierz ZIP z najnowszego Release.
 2. Rozpakuj go.
-3. Na stronie `chrome://extensions` albo `edge://extensions` usuń starą wersję.
+3. Na stronie `chrome://extensions`, `edge://extensions` albo `opera://extensions` usuń starą wersję.
 4. Kliknij ponownie **Załaduj rozpakowane** i wskaż nowy folder.
 
 Przy takiej aktualizacji lokalne ustawienia rozszerzenia mogą zostać wyzerowane.
@@ -82,7 +89,7 @@ Ta część jest potrzebna tylko osobie rozwijającej projekt.
 
 ### Pierwsze uruchomienie
 
-Wymagane są Node.js 20 lub nowszy i pnpm 10:
+Wymagane są Node.js 20.19 lub nowszy i pnpm 10:
 
 ```powershell
 corepack enable
@@ -97,26 +104,42 @@ Najpierw ustaw numer wersji w `package.json`, na przykład `1.1.0`. Następnie u
 pnpm release
 ```
 
+Na Ubuntu/Linux użyj:
+
+```bash
+pnpm release:linux
+```
+
+Skrypt linuksowy wymaga programu `zip`. Jeśli nie jest zainstalowany:
+
+```bash
+sudo apt install zip
+```
+
 Skrypt automatycznie:
 
 1. uruchomi testy;
 2. sprawdzi typy TypeScript;
-3. zbuduje rozszerzenie;
-4. utworzy gotowy ZIP w folderze `release`.
+3. zbuduje osobne wersje dla Chrome/Edge i Opery;
+4. utworzy dwa gotowe ZIP-y w folderze `release`.
 
 Przykładowy wynik:
 
 ```text
-release/dopakuj-extension-v1.1.0.zip
+release/dopakuj-extension-chrome-edge-v1.1.0.zip
+release/dopakuj-extension-opera-v1.1.0.zip
 ```
 
-Na GitHubie wybierz **Releases → Draft a new release**, wpisz tag zgodny z wersją, na przykład `v1.1.0`, przeciągnij ZIP do sekcji **Assets** i opublikuj Release.
+Na GitHubie wybierz **Releases → Draft a new release**, wpisz tag zgodny z wersją, na przykład `v1.1.0`, przeciągnij oba ZIP-y do sekcji **Assets** i opublikuj Release.
 
 ### Pozostałe polecenia
 
 ```bash
-pnpm dev          # uruchamia tryb developerski
-pnpm build        # buduje rozszerzenie
+pnpm dev          # uruchamia tryb developerski dla Chrome/Edge
+pnpm dev:opera    # uruchamia tryb developerski dla Opery
+pnpm build        # buduje obie wersje rozszerzenia
+pnpm build:chrome # buduje wersję dla Chrome/Edge
+pnpm build:opera  # buduje wersję dla Opery
 pnpm test         # uruchamia testy
 pnpm typecheck    # sprawdza typy
 pnpm preview:ui   # pokazuje podgląd panelu

@@ -2,8 +2,8 @@ $ErrorActionPreference = 'Stop'
 
 $projectRoot = Split-Path -Parent $PSScriptRoot
 $packagePath = Join-Path $projectRoot 'package.json'
-$buildDirectory = Join-Path $projectRoot '.output\chrome-mv3'
 $releaseDirectory = Join-Path $projectRoot 'release'
+$stagingDirectory = $null
 
 function Invoke-ProjectCommand {
     param(
@@ -32,30 +32,62 @@ try {
 
     Invoke-ProjectCommand -Name 'Testy' -Command { pnpm test }
     Invoke-ProjectCommand -Name 'Sprawdzanie typow' -Command { pnpm typecheck }
-    Invoke-ProjectCommand -Name 'Build rozszerzenia' -Command { pnpm build }
+    Invoke-ProjectCommand -Name 'Build dla Chrome / Edge i Opery' -Command { pnpm build }
 
-    if (-not (Test-Path -LiteralPath (Join-Path $buildDirectory 'manifest.json'))) {
-        throw "Build nie zawiera pliku manifest.json: $buildDirectory"
+    $buildTargets = @(
+        @{
+            Name = 'Chrome / Edge'
+            BuildDirectory = Join-Path $projectRoot '.output\chrome-mv3'
+            ArchiveName = "dopakuj-extension-chrome-edge-v$version.zip"
+            ExtensionDirectoryName = 'DopakujExtension-ChromeEdge'
+        },
+        @{
+            Name = 'Opera'
+            BuildDirectory = Join-Path $projectRoot '.output\opera-mv3'
+            ArchiveName = "dopakuj-extension-opera-v$version.zip"
+            ExtensionDirectoryName = 'DopakujExtension-Opera'
+        }
+    )
+
+    foreach ($target in $buildTargets) {
+        if (-not (Test-Path -LiteralPath (Join-Path $target.BuildDirectory 'manifest.json'))) {
+            throw "Build dla $($target.Name) nie zawiera pliku manifest.json: $($target.BuildDirectory)"
+        }
     }
 
     New-Item -ItemType Directory -Path $releaseDirectory -Force | Out-Null
-    $archiveName = "dopakuj-extension-$version.zip"
-    $archivePath = Join-Path $releaseDirectory $archiveName
+    $stagingDirectory = Join-Path $releaseDirectory ".staging-$version"
 
-    if (Test-Path -LiteralPath $archivePath) {
-        Remove-Item -LiteralPath $archivePath -Force
+    if (Test-Path -LiteralPath $stagingDirectory) {
+        Remove-Item -LiteralPath $stagingDirectory -Recurse -Force
+    }
+
+    foreach ($target in $buildTargets) {
+        $archivePath = Join-Path $releaseDirectory $target.ArchiveName
+        $extensionDirectory = Join-Path $stagingDirectory $target.ExtensionDirectoryName
+
+        if (Test-Path -LiteralPath $archivePath) {
+            Remove-Item -LiteralPath $archivePath -Force
+        }
+
+        Write-Host ''
+        Write-Host "==> Pakowanie ZIP dla $($target.Name)" -ForegroundColor Cyan
+        New-Item -ItemType Directory -Path $extensionDirectory -Force | Out-Null
+        Copy-Item -Path (Join-Path $target.BuildDirectory '*') -Destination $extensionDirectory -Recurse -Force
+        Compress-Archive -Path $extensionDirectory -DestinationPath $archivePath -CompressionLevel Optimal
     }
 
     Write-Host ''
-    Write-Host '==> Pakowanie ZIP' -ForegroundColor Cyan
-    Compress-Archive -Path (Join-Path $buildDirectory '*') -DestinationPath $archivePath -CompressionLevel Optimal
-
-    Write-Host ''
     Write-Host 'Gotowe:' -ForegroundColor Green
-    Write-Host $archivePath
+    foreach ($target in $buildTargets) {
+        Write-Host (Join-Path $releaseDirectory $target.ArchiveName)
+    }
     Write-Host ''
-    Write-Host 'Ten plik dodaj do Assets w GitHub Release.'
+    Write-Host 'Te pliki dodaj do Assets w GitHub Release.'
 }
 finally {
+    if ($stagingDirectory -and (Test-Path -LiteralPath $stagingDirectory)) {
+        Remove-Item -LiteralPath $stagingDirectory -Recurse -Force
+    }
     Pop-Location
 }

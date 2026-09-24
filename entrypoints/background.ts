@@ -198,7 +198,9 @@ async function handleMessage(message: ExtensionMessage, sender: chrome.runtime.M
 }
 
 export default defineBackground(() => {
-  chrome.sidePanel.setPanelBehavior({ openPanelOnActionClick: true }).catch(() => undefined);
+  if (import.meta.env.BROWSER !== 'opera') {
+    chrome.sidePanel.setPanelBehavior({ openPanelOnActionClick: true }).catch(() => undefined);
+  }
   chrome.runtime.onMessage.addListener((message: ExtensionMessage, sender, sendResponse) => {
     void handleMessage(message, sender).then(sendResponse).catch((error) => sendResponse({ ok: false, error: error instanceof Error ? error.message : String(error) }));
     return true;
